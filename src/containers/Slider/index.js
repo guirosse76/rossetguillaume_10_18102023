@@ -10,6 +10,11 @@ const Slider = () => {
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   );
+
+  const handleRadioChange = (radioIdx) => {
+    setIndex(radioIdx);
+  };
+
   const nextCard = () => {
     setTimeout(
       () => setIndex(index < byDateDesc.length - 1 ? index + 1 : 0),
@@ -20,9 +25,6 @@ const Slider = () => {
     nextCard();
   });
 
-  const handleRadioChange = (radioIdx) => {
-    setIndex(radioIdx);
-  };
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
