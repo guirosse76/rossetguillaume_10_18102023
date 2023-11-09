@@ -16,49 +16,67 @@ const Slider = () => {
   };
 
   const nextCard = () => {
-    setTimeout(
-      () => setIndex(index < byDateDesc.length - 1 ? index + 1 : 0),
-      5000
+    setIndex((previousIndex) =>
+      previousIndex < byDateDesc.length - 1 ? previousIndex + 1 : 0
     );
   };
+
+  // byDateDesc?.map((eventElt, radioIdx) => {
+  //   console.log(eventElt.date, radioIdx);
+  // });
+  // console.log(byDateDesc);
+  // const nextCard = () => {
+  //   setTimeout(
+  //     () => setIndex(index < byDateDesc.length - 1 ? index + 1 : 0),
+  //     5000
+  //   );
+  // };
   useEffect(() => {
-    nextCard();
-  });
+    const timer = setTimeout(nextCard, 5000);
+    return () => clearTimeout(timer); // Cleanup the timer when the component unmounts
+  }, [index, byDateDesc]);
 
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
-        <>
-          <div
-            key={event.title}
-            className={`SlideCard SlideCard--${
-              index === idx ? "display" : "hide"
-            }`}
-          >
-            <img src={event.cover} alt="forum" />
-            <div className="SlideCard__descriptionContainer">
-              <div className="SlideCard__description">
-                <h3>{event.title}</h3>
-                <p>{event.description}</p>
-                <div>{getMonth(new Date(event.date))}</div>
-              </div>
+        <div
+          key={event.title}
+          className={`SlideCard SlideCard--${
+            index === idx ? "display" : "hide"
+          }`}
+        >
+          <img src={event.cover} alt="forum" />
+          <div className="SlideCard__descriptionContainer">
+            <div className="SlideCard__description">
+              <h3>{event.title}</h3>
+              <p>{event.description}</p>
+              <div>{getMonth(new Date(event.date))}</div>
             </div>
           </div>
-          <div className="SlideCard__paginationContainer">
-            <div className="SlideCard__pagination">
-              {byDateDesc.map((e, radioIdx) => (
+        </div>
+      ))}
+      <div className="SlideCard__paginationContainer">
+        <div className="SlideCard__pagination">
+          {/* {byDateDesc?.map((_, radioIdx) => (
                 <input
-                  key={`${e.date}`}
+                  key={`${event.id}`}
                   type="radio"
                   name={`radio-button-${radioIdx}`}
-                  checked={idx === radioIdx}
+                  checked={index === radioIdx}
                   onChange={() => handleRadioChange(radioIdx)}
                 />
-              ))}
-            </div>
-          </div>
-        </>
-      ))}
+              ))} */}
+          {byDateDesc?.map((eventElt, radioIdx) => (
+            <input
+              key={`radio-${eventElt.date}`}
+              type="radio"
+              name="radio-button"
+              checked={index === radioIdx}
+              onChange={() => handleRadioChange(radioIdx)}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
